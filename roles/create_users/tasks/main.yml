@@ -4,7 +4,7 @@
      name: "{{ item.username }}"
      groups: "{{ item.groups }}"
      state: "present"
-     with_items: "{{ users }}"
+  with_items: "{{ users }}"
 - name: "Remove old user accounts in remove_users"
   user:
      name: "{{ item }}"
@@ -14,7 +14,7 @@
   authorized_key:
      user: "{{ item.username }}"
      key: "{{item.public_key}}"
-     with_items: "{{ users }}"
+  with_items: "{{ users }}"
 - name: "Allow admin users to sudo without a password"
   lineinfile:
      dest: "/etc/sudoers" # path: in version 2.3
