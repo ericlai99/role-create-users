@@ -9,7 +9,7 @@
   user:
      name: "{{ item }}"
      state: "absent"
-     with_items: "{{ remove_users }}"
+  with_items: "{{ remove_users }}"
 - name: "Add authorized keys"
   authorized_key:
      user: "{{ item.username }}"
