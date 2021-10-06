@@ -2,7 +2,5 @@
 - hosts: "{{ nodes }}"
   become: true
   gather_facts: true
-  vars:
-    ansible_python_interpreter: auto
-    include_vars:
-      file: testing_var/test.yml
+  roles:
+    - create_users
