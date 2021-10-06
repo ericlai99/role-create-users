@@ -1,13 +1,22 @@
-- name: Enable nginx
-  shell: "amazon-linux-extras enable nginx1.12"
-  become: yes
-- name: Install nginx
-  yum:
-    name: nginx
-    state: latest
-- name: Copy nginx files
-  copy:
-    src: "{{ role_path }}/files/nginx.conf"
-    dest: /etc/nginx/nginx.conf
-    mode: 0644
-  notify: Restart Nginx
+- name: "Create user accounts"
+    user:
+      name: "{{ item.username }}"
+      groups: "{{ item.groups }}"
+      state: "present"
+    with_items: "{{ users }}"
+- name: "Remove old user accounts in remove_users"
+    user:
+      name: "{{ item }}"
+      state: "absent"
+    with_items: "{{ remove_users }}"
+- name: "Add authorized keys"
+    authorized_key:
+      user: "{{ item.username }}"
+      key: "{{item.public_key}}"
+    with_items: "{{ users }}"
+- name: "Allow admin users to sudo without a password"
+    lineinfile:
+      dest: "/etc/sudoers" # path: in version 2.3
+      state: "present"
+      regexp: "^%admin"
+      line: "%admin ALL=(ALL) NOPASSWD: ALL"
