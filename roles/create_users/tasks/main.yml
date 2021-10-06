@@ -1,22 +1,23 @@
+---
 - name: "Create user accounts"
-    user:
-      name: "{{ item.username }}"
-      groups: "{{ item.groups }}"
-      state: "present"
-    with_items: "{{ users }}"
+  user:
+     name: "{{ item.username }}"
+     groups: "{{ item.groups }}"
+     state: "present"
+     with_items: "{{ users }}"
 - name: "Remove old user accounts in remove_users"
-    user:
-      name: "{{ item }}"
-      state: "absent"
-    with_items: "{{ remove_users }}"
+  user:
+     name: "{{ item }}"
+     state: "absent"
+     with_items: "{{ remove_users }}"
 - name: "Add authorized keys"
-    authorized_key:
-      user: "{{ item.username }}"
-      key: "{{item.public_key}}"
-    with_items: "{{ users }}"
+  authorized_key:
+     user: "{{ item.username }}"
+     key: "{{item.public_key}}"
+     with_items: "{{ users }}"
 - name: "Allow admin users to sudo without a password"
-    lineinfile:
-      dest: "/etc/sudoers" # path: in version 2.3
-      state: "present"
-      regexp: "^%admin"
-      line: "%admin ALL=(ALL) NOPASSWD: ALL"
+  lineinfile:
+     dest: "/etc/sudoers" # path: in version 2.3
+     state: "present"
+     regexp: "^%admin"
+     line: "%admin ALL=(ALL) NOPASSWD: ALL"
